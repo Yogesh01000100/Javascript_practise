@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Async Fetch Visualization</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .output {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      min-height: 100px;
+    }
+
+    .button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background-color: #3498db;
+      color: #fff;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .loader {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #3498db;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .fetching-message {
+      color: #3498db;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Async Fetch Visualization</h2>
+  <button class="button" onclick="triggerFetch()">Fetch Data</button>
+  <div class="output" id="output"></div>
+</div>
+
+<script>
+  function PromiseFunction(resolve, reject) {
+    const apiData = [
+      {
+        userId: 1,
+        username: "john_doe",
+        email: "john@example.com",
+      },
+      {
+        userId: 2,
+        username: "ram_sharma",
+        email: "sharma@example.com",
+      },
+    ];
+    setTimeout(() => {
+      resolve(apiData);
+    }, 3500);
+  }
+
+  function Fetch(url, httpVerb) {
+    if (httpVerb.method == "GET") {
+      logMessage("FETCHING DATA... <span class='loader'></span>", true);
+      return new Promise(PromiseFunction);
+    } else {
+      logMessage("ONLY GET METHOD SUPPORTED!");
+    }
+  }
+
+  function callbackFn(response) {
+    clearOutput();
+    logMessage("Response from the callback:", false);
+    logMessage(JSON.stringify(response[1], null, 2), true);
+  }
+
+  function triggerFetch() {
+    clearOutput();
+    Fetch("https://sample_fetch.com/group/data", { method: "GET" })
+      .then((data) => {
+        logMessage("API Data Received:", false);
+        callbackFn(data);
+      })
+      .catch(() => {
+        logMessage("Error fetching data.", false);
+      });
+  }
+
+  function logMessage(message, append) {
+    const outputDiv = document.getElementById("output");
+    const paragraph = document.createElement("p");
+    paragraph.innerHTML = message;
+    if (append) {
+      outputDiv.appendChild(paragraph);
+    } else {
+      outputDiv.innerHTML = "";
+      outputDiv.appendChild(paragraph);
+    }
+  }
+
+  function clearOutput() {
+    const outputDiv = document.getElementById("output");
+    outputDiv.innerHTML = "";
+  }
+</script>
+
+</body>
+</html>
