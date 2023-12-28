@@ -1,10 +1,11 @@
 function myGetFunction(val,cb)
 {
     let setter_val=21;
-    cb(setter_val);
+    let err="ERROR!"
+    cb(setter_val, err);
     console.log(val)
 }
 
-myGetFunction("/get",(data)=>{
-    console.log("From the get Callback : ",data)
+myGetFunction("/get",(data,err)=>{
+    console.log("From the get Callback : ",data,err)
 })
