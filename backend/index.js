@@ -18,7 +18,8 @@ function calculateSum(counter) {
   for (let i = 0; i <= counter; i++) {
     sum = sum + i;
   }
-  return {"sum" : sum};
+  //return {"sum" : sum};
+  return JSON.stringify(sum)
 }
 
 function firstRoute(req, res) {
@@ -29,6 +30,10 @@ function firstRoute(req, res) {
 }
 
 app.get("/test", firstRoute); // in get implementation it must be passing some parameters to firstRoute
+
+app.get("/get",(req,res)=>{
+    res.send("Hello world !")
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
